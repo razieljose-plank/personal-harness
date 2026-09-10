@@ -25,9 +25,17 @@ says "match the design" is not specified by its text.
 
 ## 2. Explore the codebase before deciding anything
 
-Spawn `Explore` subagents to answer concrete questions in parallel — where does this
-behavior live now, what tests cover it, what patterns does this repo already use for
-this kind of change, who calls the thing you are about to change.
+Exploration is worth doing in proportion to how much existing code the change has to fit
+into. On a mature repo that is most of the planning work. On an empty one there is
+nothing to fit into, and spawning agents to discover that wastes minutes and teaches you
+that this skill's instructions are decorative — which then costs you on the steps that
+matter. Look at what is actually there first, and if the answer is "almost nothing", write
+one line in the plan saying so and move to step 3.
+
+When there is code to explore, spawn `Explore` subagents to answer concrete questions in
+parallel — where does this behavior live now, what tests cover it, what patterns does
+this repo already use for this kind of change, who calls the thing you are about to
+change.
 
 Ask for the questions you actually need answered, not "explore the auth code". Vague
 delegation returns a file tour; a question returns an answer.

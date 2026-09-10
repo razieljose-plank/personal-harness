@@ -70,7 +70,10 @@ so it blocks; a stray `console.log` is not, so it warns. Blocking on small thing
 you to route around the hook, and a hook you route around protects nothing.
 
 The initial commit of a repository is exempt from the `main` block — there is no other
-branch to move to yet.
+branch to move to yet. So is a command that creates its own branch before committing
+(`git checkout -b fix/x && git commit ...`): a PreToolUse hook runs before the command, so
+the branch on disk is the one it starts from, not the one it commits on, and refusing that
+was pure friction.
 
 **On the `if` filter.** Measured behavior: `if: "Bash(git commit *)"` over-fires on long
 compound commands — a multi-line script containing a heredoc and no git invocation at all

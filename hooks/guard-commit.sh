@@ -39,10 +39,23 @@ deny() {
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 0
 
 # --- Block: committing straight to the default branch -----------------------
+# A PreToolUse hook runs BEFORE the command, so the branch on disk is the branch
+# the command starts from — not the one it commits on. `git checkout -b fix/x &&
+# git commit ...` was therefore refused for being "on main", which is exactly the
+# friction that teaches you to route around the guard. If the command creates a
+# branch before committing, judge that branch instead.
+# Flags may sit between the subcommand and -b/-c (`git checkout -q -b x`), so the
+# pattern allows them rather than assuming the tidy form.
+NEW_BRANCH=$(printf '%s' "$COMMAND" \
+  | grep -oE 'git[[:space:]]+(checkout|switch)[[:space:]]+([^;&|]*[[:space:]])?-[bc][[:space:]]+[^[:space:];&|]+' \
+  | tail -1 | awk '{print $NF}')
+
 # `git branch --show-current` is used rather than `rev-parse --abbrev-ref HEAD`
 # because rev-parse fails on an unborn branch (a repo with no commits yet),
 # which silently skipped this guard on exactly the first commit.
 BRANCH=$(git branch --show-current 2>/dev/null)
+[ -n "$NEW_BRANCH" ] && BRANCH="$NEW_BRANCH"
+
 # The initial commit of a repository is exempt: there is no other branch to
 # move to yet, and refusing it just leaves you stuck.
 if git rev-parse --verify HEAD >/dev/null 2>&1; then

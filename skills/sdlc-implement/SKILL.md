@@ -1,6 +1,6 @@
 ---
 name: sdlc-implement
-description: Execute an implementation plan step by step, keeping the test suite green and recording every deviation from the plan and why. Use after a plan exists (`.harness/current-cycle/plan.md`) and the user says "implement it", "go ahead", "execute the plan", or names the ticket again to start coding. Also use when resuming a partially implemented cycle, since it reads which steps are already done from the plan and notes on disk.
+description: Execute an implementation plan step by step, keeping verification green and recording every deviation from the plan and why. Use after a plan exists (`.harness/current-cycle/plan.md`) and the user says "implement it", "go ahead", "execute the plan", or names the ticket again to start coding. Also use when resuming a partially implemented cycle, since it reads which steps are already done from the plan and notes on disk.
 ---
 
 # Implement
@@ -33,6 +33,23 @@ like it was written by a different person is a review finding even when it is co
 Write the test that would have caught the bug, then the fix. When the plan named a
 failure a test should catch, the test should fail before your change and pass after. If
 it passes before, it is not testing what you think.
+
+### When there is no test runner
+
+Sometimes there genuinely isn't one, and there cannot be — no runner in the project, or a
+constraint that rules one out. Verify anyway, by whatever means the thing allows: drive
+the real interface, exercise the function directly, check the output by hand.
+
+Then write down, in `notes.md`, three things: what you verified, how, and **what you could
+not verify**. That third item is the one that gets dropped, and it is the one that
+matters. "Installable ✓" and "installable, except the part the sandbox blocked me from
+reaching" look identical on a checklist, and the difference only surfaces in production.
+
+Be clear with yourself that this is weaker than a suite. A green suite is a durable
+artifact that anyone can re-run next month. A hundred assertions you ran in a session are
+gone when the session ends, and the next cycle has no way to tell whether the thing was
+ever checked. Where a runner is possible, that is the reason to prefer it; where it isn't,
+that is the reason to be precise about what your evidence actually covers.
 
 ## Record deviations as they happen
 
@@ -68,7 +85,8 @@ one needs the same agreement.
 
 ## Finish the whole step
 
-Before declaring the phase done: the full test suite passes, no debugging leftovers, no
-commented-out code, and every acceptance criterion in the plan is actually met. If one
-is not, say which and why — a criterion silently dropped is the failure that survives
-all the way to production.
+Before declaring the phase done: the verification named in the plan passes — the full test
+suite where one exists, the recorded evidence where one cannot — no debugging leftovers,
+no commented-out code, and every acceptance criterion in the plan is actually met. If one
+is not, say which and why — a criterion silently dropped is the failure that survives all
+the way to production.

@@ -46,7 +46,8 @@ N+1 when step N did not actually land. Check these before advancing:
 - **plan → implement**: the plan has acceptance criteria that can be checked, and no
   open question that would change the approach. If there is one, ask the user — a wrong
   assumption here costs the whole cycle.
-- **implement → review**: the change is complete and the test suite passes. Reviewing a
+- **implement → review**: the change is complete and its verification passes — the test
+  suite where there is one, the evidence in `notes.md` where there cannot be. Reviewing a
   half-finished diff generates findings about code that was about to be written anyway.
 - **review → ship**: every blocking finding is fixed or explicitly waived by the user.
   Non-blocking findings can ship as follow-ups, but say so in the PR.
