@@ -1,0 +1,3 @@
+.harness/
+*.backup.*
+.DS_Store

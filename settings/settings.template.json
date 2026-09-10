@@ -1,0 +1,103 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git status)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git show *)",
+      "Bash(git blame *)",
+      "Bash(git branch)",
+      "Bash(git branch *)",
+      "Bash(git stash list)",
+      "Bash(git remote -v)",
+      "Bash(git rev-parse *)",
+      "Bash(npm test *)",
+      "Bash(npm run test:*)",
+      "Bash(npm run lint*)",
+      "Bash(npm run typecheck*)",
+      "Bash(npm run build*)",
+      "Bash(pnpm test *)",
+      "Bash(pnpm lint*)",
+      "Bash(pnpm typecheck*)",
+      "Bash(yarn test *)",
+      "Bash(npx tsc --noEmit*)",
+      "Bash(pytest *)",
+      "Bash(python -m pytest *)",
+      "Bash(ruff check *)",
+      "Bash(ruff format *)",
+      "Bash(mypy *)",
+      "Bash(gh pr view *)",
+      "Bash(gh pr list*)",
+      "Bash(gh pr diff *)",
+      "Bash(gh pr checks *)",
+      "Bash(gh issue view *)",
+      "Bash(gh issue list*)",
+      "Bash(gh run list*)",
+      "Bash(gh run view *)",
+      "mcp__linear__list_*",
+      "mcp__linear__get_*",
+      "mcp__linear__search_*",
+      "mcp__github__get_*",
+      "mcp__github__list_*",
+      "mcp__github__search_*"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(gh pr create*)",
+      "Bash(gh pr merge*)",
+      "Bash(git reset --hard *)",
+      "Bash(git clean -fd*)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(**/*.pem)",
+      "Read(**/id_rsa*)",
+      "Read(~/.ssh/**)",
+      "Read(~/.aws/credentials)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "__HARNESS__/hooks/post-edit-format.sh",
+            "timeout": 20,
+            "statusMessage": "Formatting"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "if": "Bash(git commit *)",
+            "command": "__HARNESS__/hooks/guard-commit.sh",
+            "timeout": 15,
+            "statusMessage": "Checking commit"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "__HARNESS__/hooks/session-start-cycle.sh",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
