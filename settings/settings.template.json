@@ -37,10 +37,7 @@
       "Bash(gh run view *)",
       "mcp__linear__list_*",
       "mcp__linear__get_*",
-      "mcp__linear__search_*",
-      "mcp__github__get_*",
-      "mcp__github__list_*",
-      "mcp__github__search_*"
+      "mcp__linear__search_*"
     ],
     "ask": [
       "Bash(git push *)",

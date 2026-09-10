@@ -54,7 +54,14 @@ register() {
 }
 
 register linear https://mcp.linear.app/mcp
-register github https://api.githubcopilot.com/mcp/
+
+# GitHub is deliberately NOT registered as an MCP server. Its endpoint
+# (https://api.githubcopilot.com/mcp/) rejects Claude Code's OAuth flow with
+# "Incompatible auth server: does not support dynamic client registration", so it
+# needs a hand-made PAT in a header. The `gh` CLI already covers what this
+# harness asks of GitHub — pr create/view/diff/checks, issue view — with no
+# credential in a config file and a fraction of the context cost of the MCP
+# server's tool definitions. Run `gh auth login` instead of registering it here.
 
 echo
 echo "Registered servers:"
@@ -68,17 +75,15 @@ fi
 
 cat <<'EOF'
 
-Both servers use browser OAuth, and registering them is not the same as being
-signed in. Start a session and run:
+Linear uses browser OAuth, and registering it is not the same as being signed
+in. Start a session and run:
 
   /mcp
 
-then authenticate each one. Until you do, every Linear and GitHub MCP call fails.
+then authenticate it. Until you do, every Linear MCP call fails.
 
-Note on GitHub: the `gh` CLI covers most of what this harness needs from GitHub
-(PR create, view, diff, checks) and costs far less context than the MCP server's
-tool definitions. The MCP server earns its place when you want richer GitHub
-queries; if you find you never use it, removing it is a real context saving:
+GitHub is handled by the `gh` CLI rather than an MCP server — see the comment
+above for why. Check it with:
 
-  claude mcp remove github --scope user
+  gh auth status
 EOF

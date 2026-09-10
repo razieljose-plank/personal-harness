@@ -94,8 +94,18 @@ README triggers it. It's a warning rather than a block, so the noise is survivab
 
 ```bash
 ./install.sh      # symlinks skills + agents into ~/.claude, merges settings (backs up first)
-./setup-mcp.sh    # registers the Linear and GitHub MCP servers at user scope
+./setup-mcp.sh    # registers the Linear MCP server at user scope
+gh auth login     # GitHub goes through the CLI, not through MCP
 ```
+
+Then run `/mcp` in a session to complete Linear's browser OAuth. Registering a server
+is not the same as being signed in to it.
+
+**GitHub is deliberately not an MCP server here.** Its endpoint rejects Claude Code's
+OAuth flow (`does not support dynamic client registration`) and wants a hand-made PAT in
+a header. The `gh` CLI covers everything the harness asks of GitHub — PR create, view,
+diff, checks — with no credential sitting in a config file and a fraction of the context
+cost of the MCP server's tool definitions.
 
 Skills and agents are symlinked, so edits in this repo take effect in the next session
 with no reinstall.
@@ -107,11 +117,11 @@ in your `settings.json`.
 ## Permissions
 
 The allow-list pre-approves things that are always fine — read-only git, test and lint
-runners, read-only `gh`, and read-only Linear/GitHub MCP tools. Writes to external systems
-still prompt, because "stop asking me" and "post to my team's tracker without asking" are
+runners, read-only `gh`, and read-only Linear MCP tools. Writes to external systems still
+prompt, because "stop asking me" and "post to my team's tracker without asking" are
 different requests.
 
-Two syntax rules that cost real debugging time if you get them wrong:
+Three syntax rules that cost real debugging time if you get them wrong:
 
 - Path rules are only consulted for `Read()` and `Edit()`. A `Write(docs/**)` rule is
   accepted and then **never used** — write `Edit(docs/**)` instead.
