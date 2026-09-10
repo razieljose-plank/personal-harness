@@ -12,6 +12,16 @@
 set -uo pipefail
 
 INPUT=$(cat)
+
+# Re-check the command ourselves rather than trusting the hook's `if` filter.
+# Measured behavior: `if` over-fires on long compound commands — a multi-line
+# script with a heredoc and no git invocation at all was matched as `git commit`
+# and blocked. A guard that randomly refuses unrelated commands is one you turn
+# off within a day, so the filter is treated as a cheap pre-filter and this is
+# the real check.
+COMMAND=$(printf '%s' "$INPUT" | jq -r '.tool_input.command // empty')
+printf '%s' "$COMMAND" | grep -qE '(^|[;&|]|&&|\|\|)[[:space:]]*git[[:space:]]+([^;&|]*[[:space:]])?commit([[:space:]]|$)' || exit 0
+
 CWD=$(printf '%s' "$INPUT" | jq -r '.cwd // empty')
 [ -n "$CWD" ] && cd "$CWD" 2>/dev/null
 

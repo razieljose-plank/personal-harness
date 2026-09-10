@@ -72,16 +72,23 @@ you to route around the hook, and a hook you route around protects nothing.
 The initial commit of a repository is exempt from the `main` block — there is no other
 branch to move to yet.
 
-**Two known limitations, both verified by testing:**
+**On the `if` filter.** Measured behavior: `if: "Bash(git commit *)"` over-fires on long
+compound commands — a multi-line script containing a heredoc and no git invocation at all
+was matched and blocked. So `guard-commit.sh` re-parses `tool_input.command` itself and
+exits immediately unless the command really is a `git commit`. The `if` field is treated
+as a cheap pre-filter, not as the check. Verified against 11 cases, including
+`git commit-tree` (correctly ignored) and `git -c user.name=x commit` (correctly caught).
 
-1. The `git commit` filter matches against the Bash command string, so a long compound
-   command (`git add . && git commit -m x`) matches unreliably — sometimes firing when it
-   shouldn't, sometimes not firing when it should. Run `git commit` as its own command for
-   the guard to behave predictably.
-2. The guard inspects the repository at the **session's** working directory, not the
-   repository the command targets. `git -C ../other-repo commit` is checked against the
-   wrong repo. In normal use these are the same directory, so this only matters if you
-   drive another checkout from the side.
+The general lesson, and the reason it's written up here: **a guard that occasionally
+refuses unrelated work gets switched off**, and then it protects nothing. False positives
+are not a cosmetic problem in a harness — they are the failure mode.
+
+**Known limitation:** the guard inspects the repository at the **session's** working
+directory, not the one the command targets, so `git -C ../other-repo commit` is checked
+against the wrong repo. In normal use they're the same directory.
+
+The `console.log` warning also matches documentation that *mentions* `console.log` — this
+README triggers it. It's a warning rather than a block, so the noise is survivable.
 
 ## Install
 
