@@ -53,6 +53,7 @@ the acceptance criteria and the architecture decisions to judge the diff:
 # <ISSUE-ID>: <title>
 
 **Link:** <linear url>
+**GitHub issue:** _opened on approval_
 **Status:** planned
 **Approval:** _pending_ — who approved the architecture decisions, and when
 
@@ -142,6 +143,18 @@ decisions, since those are the parts only they can judge. Wait for an explicit c
 each architecture decision and record it in `plan.md`: fill in each **Decision** with what
 they chose, and set **Approval** to who approved and when.
 
+Approval is also the moment the work becomes visible, so right after recording it do two
+things — and tell the user you are doing them, since their approval is what covers them:
+
+- **Open a GitHub issue** in the repo being changed, mirroring the ticket: title, a link
+  back to the Linear issue, the Problem, and the Acceptance criteria. Record its number in
+  `plan.md` as **GitHub issue**. This is the copy of the ticket the rest of the team can
+  read — they may not have access to your Linear — and the PR closes it with `Closes #N`.
+- **Move the Linear issue to In Progress**, so the tracker says what is true.
+
+If the repo has no GitHub remote, or Linear is unavailable, skip that step and say so
+rather than failing the phase.
+
 If the plan has no architecture decisions, say so and say why. "None" is itself a claim
 you can get wrong, and it is the one that matters most — the user confirms it like
 anything else.
@@ -150,10 +163,10 @@ Do not start implementing before this. The implement phase treats the recorded d
 as its contract, and the review phase checks the diff against them; without a recorded
 approval, both of those checks are measuring against nothing.
 
-## 6. Offer the ticket update
+## 6. Offer the plan as a comment
 
-Offer to post the plan summary as a Linear comment and move the issue to In Progress.
-Both write to a system other people read, so ask first and do it only on a yes.
+Offer to post the plan summary as a Linear comment. It writes to a system other people
+read, so ask first and do it only on a yes.
 
 ## Scaling down
 
