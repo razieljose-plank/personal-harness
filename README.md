@@ -1,7 +1,7 @@
 # personal-harness
 
 A personal SDLC harness for Claude Code: five skills that take a ticket from Linear to a
-merged PR, three adversarial review subagents, three hooks, and a permission set tuned to
+merged PR, four adversarial review subagents, three hooks, and a permission set tuned to
 stop asking about things that are always fine.
 
 ## Why this exists
@@ -60,8 +60,15 @@ flight.
 ## Adversarial review
 
 Three subagents read the same diff from angles that don't overlap — correctness,
-performance, security — and run in parallel. They're read-only by construction, so no
-reviewer can "fix" the code out from under the other two.
+performance, security — and run in parallel. A fourth, `review-contracts`, joins when the
+change touches an interface: it opens both sides at once — an API and its client, a route
+and its links, a schema and its readers — to catch mismatches where each side is correct
+alone and the pair is broken. They're read-only by construction, so no reviewer can "fix"
+the code out from under the others.
+
+A reviewer that fails is retried once. If it fails again, the review names the missing
+angle at the top and shipping waits until it is rerun or waived — "no security findings"
+and "the security reviewer crashed" must never look the same.
 
 Every finding then goes through a verification pass before it reaches you: does the line
 say what the finding claims, is the path reachable, is it already tested, was it already
@@ -124,7 +131,10 @@ diff, checks — with no credential sitting in a config file and a fraction of t
 cost of the MCP server's tool definitions.
 
 Skills and agents are symlinked, so edits in this repo take effect in the next session
-with no reinstall.
+with no reinstall. A **new** skill or agent needs `./install.sh` again to create its link.
+A running session picks new agents up with a delay — in testing, an agent was reported
+as not found right after its link was created and became available a few minutes later —
+so if that happens, wait and retry before assuming the install failed.
 
 Settings are **merged**: permission rules are unioned, and this harness's hooks are
 replaced by command path so reinstalling never duplicates them or disturbs anything else
@@ -174,7 +184,7 @@ rather than inheriting it from this repo.
 
 ```
 skills/     five SDLC phase skills + the sdlc orchestrator
-agents/     three read-only adversarial reviewers
+agents/     four read-only adversarial reviewers
 hooks/      three shell hooks
 settings/   settings.template.json, merged by install.sh
 ```

@@ -51,7 +51,8 @@ N+1 when step N did not actually land. Check these before advancing:
 - **implement → review**: the change is complete and its verification passes — the test
   suite where there is one, the evidence in `notes.md` where there cannot be. Reviewing a
   half-finished diff generates findings about code that was about to be written anyway.
-- **review → ship**: every blocking finding is fixed or explicitly waived by the user.
+- **review → ship**: every blocking finding is fixed or explicitly waived by the user,
+  and every review angle actually ran — a reviewer that failed is a gap, not a pass.
   Non-blocking findings can ship as follow-ups, but say so in the PR.
 - **ship → distill**: the PR exists. Distilling a cycle that never shipped records
   lessons from an unfinished experiment.
