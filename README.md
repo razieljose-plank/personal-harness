@@ -34,6 +34,19 @@ Linear issue ──▶ plan ──▶ implement ──▶ review ──▶ ship 
 `sdlc` runs the whole thing and enforces the gates between phases. Each phase also works
 standalone — `/sdlc-review` on any diff is useful on its own.
 
+### Architecture stays with you
+
+The harness proposes architecture decisions; it never makes them. Module boundaries,
+data flow, the data model, new dependencies — `sdlc-plan` lays each one out as options
+with a recommendation, and the cycle cannot move to implementation until you have chosen
+and the choice is recorded in `plan.md`. `sdlc-implement` stops if the build needs a
+decision you did not approve, and `sdlc-review` blocks any that slipped into the diff.
+
+The reason: you have to hold the full picture of the system — the modules, how
+information flows, what depends on what. Every decision made for you is a part of your
+own system you no longer fully understand. Implementation details stay with the agent, so
+this does not turn into asking about everything.
+
 ### State lives on disk, not in the conversation
 
 Every phase reads its input from `.harness/current-cycle/` and writes its output back

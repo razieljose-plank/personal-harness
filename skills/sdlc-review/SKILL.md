@@ -23,6 +23,14 @@ change was supposed to do, which is what makes "the diff does not meet acceptanc
 criterion 3" a possible finding. The notes say where the implementation already knows
 it deviated.
 
+Then check the diff against the plan's **Architecture decisions** yourself. This is not a
+job for the three reviewers — they hunt defects, and this is about who decided what. Look
+for choices that shape the system but were never approved: a new dependency, a new module
+or boundary, a changed data model, a pattern other code will be expected to copy. Each
+one is a **blocking** finding until the engineer either approves it, recorded in
+`plan.md`, or it is reverted. Correct code does not make it approved — the point of the
+gate is that the engineer knows their own system.
+
 If the diff is empty, stop and say so rather than reviewing the working tree by accident.
 
 ## 2. Launch three reviewers in parallel
