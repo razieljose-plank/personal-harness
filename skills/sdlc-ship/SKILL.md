@@ -70,6 +70,11 @@ The problem from the plan, and the ticket link.
 How it was done, and any deviation from the plan with the reason.
 This is the section reviewers actually need.
 
+## Architecture decisions
+Each decision from the plan, what was chosen, and who approved it. "None"
+is a valid entry. This lets a reader see the system-level choices without
+reverse-engineering them from the diff.
+
 ## Testing
 What was added or changed, and how to verify by hand if that applies.
 

@@ -43,9 +43,11 @@ keeps the other four phases out of context:
 The value of a harness is not that it runs five steps. It's that it refuses to run step
 N+1 when step N did not actually land. Check these before advancing:
 
-- **plan → implement**: the plan has acceptance criteria that can be checked, and no
-  open question that would change the approach. If there is one, ask the user — a wrong
-  assumption here costs the whole cycle.
+- **plan → implement**: the user has approved the plan — every architecture decision
+  carries their recorded choice and **Approval** is filled in. The acceptance criteria
+  can be checked, and no open question would change the approach. This is the gate that
+  keeps architecture with the engineer: without it, the agent designs the system and the
+  engineer inherits a picture they never drew.
 - **implement → review**: the change is complete and its verification passes — the test
   suite where there is one, the evidence in `notes.md` where there cannot be. Reviewing a
   half-finished diff generates findings about code that was about to be written anyway.

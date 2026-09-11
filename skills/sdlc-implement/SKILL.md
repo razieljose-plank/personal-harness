@@ -79,9 +79,15 @@ exactly the one you forget once it stops being surprising.
 
 Small deviation — a different function name, an extra helper — take it and note it.
 
-Deviation that changes the approach or the acceptance criteria: stop and tell the user
-what you found and what it implies. Do not quietly redesign. The plan was agreed; a new
-one needs the same agreement.
+Deviation that changes the approach, the acceptance criteria, or needs an architecture
+decision the plan did not approve: stop and bring it to the user as a proposal, in the
+same shape as the plan — options, trade-offs, recommendation. Do not quietly redesign.
+The engineer approved specific decisions; a new one needs the same approval, recorded in
+`plan.md`, before you build on it.
+
+This is where architecture most often leaks — not in the plan, but halfway through
+implementation, when the approved design turns out not to fit and the fastest way out is
+a new dependency or a new pattern that nobody decided on.
 
 ## Finish the whole step
 
