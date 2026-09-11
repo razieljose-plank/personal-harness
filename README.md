@@ -130,6 +130,26 @@ Settings are **merged**: permission rules are unioned, and this harness's hooks 
 replaced by command path so reinstalling never duplicates them or disturbs anything else
 in your `settings.json`.
 
+## Slack notifications
+
+The team hears about a change when its PR opens — the moment there is something to
+review. This uses GitHub's own Slack app, not anything inside the harness. In the channel
+that should receive the messages:
+
+```
+/github subscribe <owner>/<repo> pulls
+/github unsubscribe <owner>/<repo> issues commits releases deployments
+```
+
+The channel you run it in is the destination; each channel keeps its own subscriptions,
+so different repos can go to different channels. Private channels need `/invite @GitHub`
+first.
+
+It also posts when a PR is merged — the app has no "opened only" filter. That is accepted
+on purpose: the merge message closes the loop for the people who were asked to review. If
+it ever becomes noise, the alternative is a harness hook posting to an incoming webhook,
+at the cost of storing a secret.
+
 ## Permissions
 
 The allow-list pre-approves things that are always fine — read-only git, test and lint
