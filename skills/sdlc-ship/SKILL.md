@@ -99,8 +99,4 @@ visible to other people, and an unwanted PR is annoying to retract.
 
 Use `gh pr create` with the body from a file rather than inline, so formatting survives.
 
-Opening the PR is what tells the team: GitHub's Slack app posts it to the channel
-subscribed to this repo, with the title and a link. So the title and the What paragraph
-are what reviewers see first — write them for someone deciding whether to review now.
-
 After it exists, offer to link the PR back on the Linear issue.
