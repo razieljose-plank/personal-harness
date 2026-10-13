@@ -1,7 +1,7 @@
 # personal-harness
 
 A personal SDLC harness for Claude Code: five skills that take a ticket from Linear to a
-merged PR, four adversarial review subagents, three hooks, and a permission set tuned to
+merged PR, five adversarial review subagents, three hooks, and a permission set tuned to
 stop asking about things that are always fine.
 
 ## Why this exists
@@ -63,8 +63,11 @@ Three subagents read the same diff from angles that don't overlap — correctnes
 performance, security — and run in parallel. A fourth, `review-contracts`, joins when the
 change touches an interface: it opens both sides at once — an API and its client, a route
 and its links, a schema and its readers — to catch mismatches where each side is correct
-alone and the pair is broken. They're read-only by construction, so no reviewer can "fix"
-the code out from under the others.
+alone and the pair is broken. A fifth, `review-codex`, hands the whole diff to OpenAI
+Codex (`gpt-6.1-sol`) in a read-only sandbox: every other reviewer is Claude, and a
+second model family brings different blind spots. It is skipped, visibly, when `codex`
+is not installed. They're read-only by construction, so no reviewer can "fix" the code
+out from under the others.
 
 A reviewer that fails is retried once. If it fails again, the review names the missing
 angle at the top and shipping waits until it is rerun or waived — "no security findings"
