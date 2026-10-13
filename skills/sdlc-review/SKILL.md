@@ -6,8 +6,8 @@ description: Adversarially review a change with parallel subagents attacking it 
 # Adversarial Review
 
 Three reviewers attack the change from angles that do not overlap — four when it touches
-an interface — then every finding has to survive a verification pass before it reaches
-the user.
+an interface — plus a fifth from a different model family, then every finding has to
+survive a verification pass before it reaches the user.
 
 The reason for the structure: a single reviewer reading a diff top to bottom finds the
 bugs that look like bugs. Splitting by angle forces coverage of the classes that don't
@@ -44,6 +44,14 @@ machine and the code that moves it, event payloads, config keys, stored data. Li
 ones you see and hand them to it as a starting point; it will look for more. If the diff
 touches none, skip it and write why in the review — a skipped angle has to be visible, or
 it reads exactly like a clean one.
+
+`review-codex` also always runs. It is not another angle: it hands the whole diff to
+OpenAI Codex and relays what comes back. Every other reviewer is Claude, and splitting by
+angle does not help with the blind spots they share — a second model family does. Expect
+it to duplicate some findings; that overlap is cheap and the rest is the point. If it
+reports `CODEX UNAVAILABLE`, record the angle as skipped with that reason rather than
+failed — it is an optional extra, so it does not block shipping. `CODEX FAILED` is a
+failure like any other and goes through the retry below.
 
 Spawn them all in a single message so they run concurrently. They are read-only by
 construction, so a reviewer cannot "helpfully" fix what it found and invalidate the diff
@@ -100,7 +108,7 @@ Write `.harness/current-cycle/review.md`:
 # Review: <ISSUE-ID>
 
 **Base:** <ref> · **Files:** N · **Findings:** N blocking, N should-fix, N nits
-**Coverage:** bugs ✓ · perf ✓ · security ✓ · contracts ✓ | skipped — <why>
+**Coverage:** bugs ✓ · perf ✓ · security ✓ · contracts ✓ | skipped — <why> · codex ✓ | skipped — <why>
 <!-- an angle that failed twice: "security ✗ NOT COVERED — <what happened>" -->
 
 ## Blocking
