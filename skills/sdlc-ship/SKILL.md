@@ -40,18 +40,25 @@ what makes `git log` readable a year later:
 Refs: <ISSUE-ID>
 ```
 
-Types: `feat`, `fix`, `refactor`, `perf`, `test`, `docs`, `chore`, `build`, `ci`.
+Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`,
+`chore`, `revert`. Scope is optional. Mark a breaking change with `!` before the colon:
+`feat(api)!: drop the v1 endpoint`.
 
-The subject is imperative and under ~72 chars: "add retry to webhook delivery", not
-"added" or "adds". The body explains *why* — the diff already shows what. If the plan
-recorded a constraint that forced this approach, that belongs here; it is the thing a
-reader six months from now cannot reconstruct.
+The subject is imperative, at most 72 characters and ideally under 50, with no trailing
+period: "add retry to webhook delivery", not "added" or "adds". Always in English.
+
+Add a body only when the *why* is not obvious from the diff, wrapped at 72. When there
+is one, it explains why, not what. If the plan recorded a constraint that forced this
+approach, that belongs here; it is the thing a reader six months from now cannot
+reconstruct. `Refs: <ISSUE-ID>` stays either way.
 
 Split into multiple commits when the change contains genuinely separate concerns — a
 refactor and a behavior change in one commit is the diff nobody can review. Don't split
 mechanically; two commits that must land together are one commit.
 
-End the message with the attribution line this repo's CLAUDE.md specifies.
+No attribution: never add a `Co-authored-by` trailer or a "Generated with Claude Code"
+line, in commits or in the PR title and body. A global commit-msg hook enforces the
+format; if it blocks the commit, fix the message. Never use `--no-verify`.
 
 ## 4. PR body from plan + diff
 
